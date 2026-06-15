@@ -226,13 +226,22 @@ function renderNews(){
 function startNewsReading(index){
     if(index!==undefined) AppState.currentNewsIndex=index;
     displayNewsItem();
-    document.getElementById('newsReadingOverlay').classList.add('active');
+    const overlay = document.getElementById('newsReadingOverlay');
+    overlay.classList.add('active');
+    overlay.style.pointerEvents = 'auto';
     document.getElementById('readingDialectNote').textContent='Reading in '+(DialectNames[AppState.currentProfile.dialect]||'English');
     const n=AppState.newsItems[AppState.currentNewsIndex];
     speakText(n.title+'. '+n.content);
 }
 
-function stopNewsReading(){ stopSpeaking(); document.getElementById('newsReadingOverlay').classList.remove('active'); }
+function stopNewsReading(){
+    stopSpeaking();
+    const overlay = document.getElementById('newsReadingOverlay');
+    overlay.classList.remove('active');
+    overlay.style.pointerEvents = 'none';
+    const btn = document.getElementById('playPauseBtn');
+    if(btn) btn.innerHTML = '<i class="fas fa-play"></i>';
+}
 
 function displayNewsItem(){
     const n=AppState.newsItems[AppState.currentNewsIndex];

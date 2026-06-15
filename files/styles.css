@@ -281,7 +281,7 @@ body {
 .summary-status { text-align: center; margin-top: 12px; font-weight: 700; font-size: 15px; }
 
 /* ── NEWS READING OVERLAY ── */
-.overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1000; align-items: flex-end; justify-content: center; backdrop-filter: blur(4px); pointer-events: none; }
+.overlay { display: none; pointer-events: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1000; align-items: flex-end; justify-content: center; backdrop-filter: blur(4px); pointer-events: none; }
 .overlay.active { display: flex; pointer-events: auto; }
 .news-reading-container {
   background: white; border-radius: 28px 28px 0 0; padding: 32px 28px 40px;
@@ -322,7 +322,7 @@ body {
 .progress-fill-large { height: 100%; background: var(--coral); border-radius: 3px; transition: width 0.3s; }
 
 /* ── VIDEO MODAL ── */
-.modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1001; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px); pointer-events: none; }
+.modal { display: none; pointer-events: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1001; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px); pointer-events: none; }
 .modal.active { display: flex; pointer-events: auto; }
 .modal-content { background: white; border-radius: 24px; max-width: 540px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-lg); }
 .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 24px; border-bottom: 1.5px solid var(--border); }
