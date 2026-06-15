@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DailyCare — AI Elder Companion</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen" class="screen active">
+    <div class="login-container">
+        <div class="login-header">
+            <i class="fas fa-heart-pulse logo-icon"></i>
+            <h1>DailyCare</h1>
+            <p>Your AI Elder Companion · Powered by Agnes AI</p>
+        </div>
+        <div class="profile-selection">
+            <h2>Select Profile</h2>
+            <div class="profile-cards">
+                <div class="profile-card" onclick="selectProfile('grandpa')">
+                    <div class="profile-avatar">👴</div>
+                    <h3>Grandpa Wang</h3>
+                    <p>Age 72 · Hypertension</p>
+                </div>
+                <div class="profile-card" onclick="selectProfile('grandma')">
+                    <div class="profile-avatar">👵</div>
+                    <h3>Grandma Li</h3>
+                    <p>Age 68 · Diabetes</p>
+                </div>
+                <div class="profile-card" onclick="selectProfile('custom')">
+                    <div class="profile-avatar"><i class="fas fa-user-plus" style="font-size:36px;color:#FF6B6B"></i></div>
+                    <h3>New Profile</h3>
+                    <p>Create your own</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- PROFILE SETUP -->
+<div id="profileSetupScreen" class="screen">
+    <div class="setup-container">
+        <h2>✨ Create Your Profile</h2>
+        <form id="profileForm" onsubmit="saveProfile(event)">
+            <div class="form-group"><label>👤 Full Name</label><input type="text" id="userName" placeholder="e.g. Grandpa Tan" required></div>
+            <div class="form-group"><label>🎂 Age</label><input type="number" id="userAge" placeholder="e.g. 72" required></div>
+            <div class="form-group">
+                <label>🏥 Health Conditions <span style="font-weight:500;font-size:13px;color:#9ca3af">(tick all that apply)</span></label>
+                <div class="checkbox-grid">
+                    <label class="checkbox-item"><input type="checkbox" value="Hypertension"> 🩸 Hypertension</label>
+                    <label class="checkbox-item"><input type="checkbox" value="Diabetes"> 🍬 Diabetes</label>
+                    <label class="checkbox-item"><input type="checkbox" value="Heart Disease"> ❤️ Heart Disease</label>
+                    <label class="checkbox-item"><input type="checkbox" value="Arthritis"> 🦴 Arthritis</label>
+                    <label class="checkbox-item"><input type="checkbox" value="Respiratory Issues"> 🫁 Respiratory</label>
+                    <label class="checkbox-item"><input type="checkbox" value="High Cholesterol"> 🧈 High Cholesterol</label>
+                    <label class="checkbox-item"><input type="checkbox" value="Kidney Disease"> 🫘 Kidney Disease</label>
+                    <label class="checkbox-item"><input type="checkbox" value="Osteoporosis"> 💪 Osteoporosis</label>
+                    <label class="checkbox-item"><input type="checkbox" value="Dementia"> 🧠 Dementia</label>
+                    <label class="checkbox-item"><input type="checkbox" value="Parkinson's"> 🤝 Parkinson's</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>🗣️ Preferred Language / Dialect</label>
+                <select id="userDialect">
+                    <optgroup label="🇸🇬 Singapore & Malaysia">
+                        <option value="singlish">Singlish</option>
+                        <option value="mandarin">Mandarin Chinese</option>
+                        <option value="cantonese">Cantonese</option>
+                        <option value="hokkien">Hokkien</option>
+                        <option value="teochew">Teochew</option>
+                        <option value="hakka">Hakka</option>
+                        <option value="malay">Malay / Bahasa Melayu</option>
+                        <option value="tamil">Tamil</option>
+                        <option value="english">English</option>
+                    </optgroup>
+                    <optgroup label="🌏 Southeast Asia">
+                        <option value="vietnamese">Vietnamese</option>
+                        <option value="thai">Thai</option>
+                        <option value="tagalog">Tagalog (Filipino)</option>
+                        <option value="indonesian">Bahasa Indonesia</option>
+                        <option value="burmese">Burmese</option>
+                        <option value="khmer">Khmer</option>
+                        <option value="lao">Lao</option>
+                    </optgroup>
+                    <optgroup label="🌍 South Asia">
+                        <option value="hindi">Hindi</option>
+                        <option value="bengali">Bengali</option>
+                        <option value="punjabi">Punjabi</option>
+                        <option value="gujarati">Gujarati</option>
+                        <option value="urdu">Urdu</option>
+                    </optgroup>
+                </select>
+            </div>
+            <div class="form-group"><label>📞 Emergency Contact</label><input type="tel" id="emergencyContact" placeholder="+65 9000 1234" required></div>
+            <div class="form-group">
+                <label>👨‍👩‍👧 Family Members & WhatsApp Numbers</label>
+                <div id="familyInputList">
+                    <div class="family-input-row" style="display:grid;grid-template-columns:2fr 2fr 1.2fr;gap:8px;margin-bottom:10px">
+                        <input type="text" placeholder="Name (e.g. Son Wei Ming)" class="family-name" style="padding:12px;border:2px solid #f0e8e0;border-radius:10px;font-size:14px;font-family:Nunito,sans-serif">
+                        <input type="tel" placeholder="+65 9123 4567" class="family-phone" style="padding:12px;border:2px solid #f0e8e0;border-radius:10px;font-size:14px;font-family:Nunito,sans-serif">
+                        <select class="family-avatar" style="padding:10px 6px;border:2px solid #f0e8e0;border-radius:10px;font-size:12px;font-family:Nunito,sans-serif">
+                            <option value="👨">👨 Son</option>
+                            <option value="👩">👩 Daughter</option>
+                            <option value="👴">👴 Husband</option>
+                            <option value="👵">👵 Wife</option>
+                            <option value="👦">👦 Grandson</option>
+                            <option value="👧">👧 Granddaughter</option>
+                            <option value="👶">👶 Grandchild</option>
+                            <option value="🧑">🧑 Sibling</option>
+                            <option value="👨‍⚕️">👨‍⚕️ Caregiver</option>
+                            <option value="🤝">🤝 Friend</option>
+                            <option value="👤">👤 Other</option>
+                        </select>
+                    </div>
+                    <div class="family-input-row" style="display:grid;grid-template-columns:2fr 2fr 1.2fr;gap:8px;margin-bottom:10px">
+                        <input type="text" placeholder="Name (e.g. Daughter Mei)" class="family-name" style="padding:12px;border:2px solid #f0e8e0;border-radius:10px;font-size:14px;font-family:Nunito,sans-serif">
+                        <input type="tel" placeholder="+65 9876 5432" class="family-phone" style="padding:12px;border:2px solid #f0e8e0;border-radius:10px;font-size:14px;font-family:Nunito,sans-serif">
+                        <select class="family-avatar" style="padding:10px 6px;border:2px solid #f0e8e0;border-radius:10px;font-size:12px;font-family:Nunito,sans-serif">
+                            <option value="👨">👨 Son</option>
+                            <option value="👩">👩 Daughter</option>
+                            <option value="👴">👴 Husband</option>
+                            <option value="👵">👵 Wife</option>
+                            <option value="👦">👦 Grandson</option>
+                            <option value="👧">👧 Granddaughter</option>
+                            <option value="👶">👶 Grandchild</option>
+                            <option value="🧑">🧑 Sibling</option>
+                            <option value="👨‍⚕️">👨‍⚕️ Caregiver</option>
+                            <option value="🤝">🤝 Friend</option>
+                            <option value="👤">👤 Other</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="button" onclick="addFamilyField()" style="width:100%;padding:10px;border:2px dashed #f0e8e0;border-radius:10px;background:none;color:#FF6B6B;font-weight:700;font-size:14px;cursor:pointer;font-family:Nunito,sans-serif;margin-top:4px">＋ Add Another Family Member</button>
+            </div>
+            <div class="medication-setup">
+                <h3>💊 Medication Schedule</h3>
+                <div id="medicationList">
+                    <div class="med-item">
+                        <input type="text" placeholder="Medication name" class="med-name">
+                        <input type="time" class="med-time">
+                        <select class="med-dosage"><option>Once daily</option><option>Twice daily</option><option>Three times daily</option></select>
+                    </div>
+                </div>
+                <button type="button" class="add-med-btn" onclick="addMedicationField()">＋ Add Medication</button>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn-secondary" onclick="showScreen('loginScreen')">← Back</button>
+                <button type="submit" class="btn-primary">Save Profile ✓</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboardScreen" class="screen">
+    <nav class="top-nav">
+        <div class="nav-brand"><i class="fas fa-heart-pulse"></i> DailyCare</div>
+        <div class="nav-user"><span id="navUserName"></span><div class="nav-avatar" id="navAvatar"></div></div>
+    </nav>
+    <div class="greeting-section">
+        <div class="greeting-content">
+            <h1 id="greetingText">Good Morning!</h1>
+            <p id="dateDisplay"></p>
+            <div class="weather-widget"><i class="fas fa-sun"></i> Sunny 28°C · Singapore</div>
+        </div>
+    </div>
+
+    <!-- HOME TAB -->
+    <div id="tab-home" class="tab-content active">
+        <div class="dashboard-grid">
+            <div class="card medication-card">
+                <div class="card-header"><div class="card-icon"><i class="fas fa-pills"></i></div><h2>Medications</h2><span class="card-badge" id="medCompleted">0/0</span></div>
+                <div class="card-body" id="medicationCards"></div>
+            </div>
+            <div class="card news-card">
+                <div class="card-header"><div class="card-icon"><i class="fas fa-newspaper"></i></div><h2>Daily News</h2><button class="read-btn" onclick="startNewsReading()"><i class="fas fa-volume-up"></i> Read Aloud</button></div>
+                <div class="card-body" id="newsCards"></div>
+            </div>
+            <div class="card activity-card">
+                <div class="card-header"><div class="card-icon"><i class="fas fa-tint"></i></div><h2>Daily Tracker</h2></div>
+                <div class="card-body">
+                    <div class="activity-item">
+                        <div class="activity-label"><i class="fas fa-tint"></i> Water Intake</div>
+                        <div class="water-cups" id="waterCups"></div>
+                        <div class="water-controls">
+                            <button class="water-btn" onclick="updateWater(-1)">−</button>
+                            <span id="waterCount">0 / 8 glasses</span>
+                            <button class="water-btn" onclick="updateWater(1)">+</button>
+                        </div>
+                    </div>
+                    <div class="activity-item" style="margin-top:18px">
+                        <div class="activity-label" style="display:flex;justify-content:space-between;align-items:center">
+                            <span><i class="fas fa-walking"></i> Steps Today</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:10px;margin:6px 0">
+                            <div class="activity-value" id="stepCountDisplay">3,247</div>
+                            <input type="number" id="stepCountInput" value="3247" min="0" max="99999" onchange="updateSteps(this.value)"
+                                style="width:90px;padding:6px 10px;border:2px solid #f0e8e0;border-radius:10px;font-size:15px;font-weight:700;font-family:Nunito,sans-serif;display:none">
+                            <button onclick="toggleStepEdit()" type="button" id="stepEditBtn"
+                                style="background:none;border:1.5px solid #f0e8e0;border-radius:8px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer;color:#6b7280;font-family:Nunito,sans-serif">✏️ Edit</button>
+                        </div>
+                        <div class="progress-bar"><div class="progress-fill" id="stepProgressBar" style="width:65%"></div></div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px">
+                            <div class="activity-goal">Goal: <span id="stepGoalDisplay">5,000</span> steps</div>
+                            <div style="display:flex;align-items:center;gap:6px">
+                                <span style="font-size:12px;color:#9ca3af">Change:</span>
+                                <input type="number" id="stepGoalInput" value="5000" min="1000" max="50000" step="500"
+                                    onchange="updateStepGoal(this.value)"
+                                    style="width:80px;padding:4px 8px;border:2px solid #f0e8e0;border-radius:8px;font-size:13px;font-weight:700;font-family:Nunito,sans-serif">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card family-card">
+                <div class="card-header"><div class="card-icon"><i class="fas fa-users"></i></div><h2>Family</h2></div>
+                <div class="card-body">
+                    <div id="familyMembers"></div>
+                    <div id="whatsappButtons"></div>
+                    <button class="btn-primary full-width" onclick="sendDailySummary()"><i class="fas fa-video"></i> Send Daily Video Summary</button>
+                    <div id="summaryStatus" style="margin-top:10px;font-size:14px;text-align:center;color:#4ECDC4;font-weight:700"></div>
+                </div>
+            </div>
+            <div class="card quick-actions-card">
+                <div class="card-header"><div class="card-icon"><i class="fas fa-bolt"></i></div><h2>Quick Actions</h2></div>
+                <div class="card-body">
+                    <button class="quick-action-btn emergency" onclick="callEmergency()"><i class="fas fa-phone-alt"></i> Emergency Call</button>
+                    <button class="quick-action-btn" onclick="switchTab('schedule')"><i class="fas fa-calendar-check"></i> Today's Schedule</button>
+                    <button class="quick-action-btn" onclick="switchTab('health')"><i class="fas fa-heartbeat"></i> My Health Info</button>
+                    <button class="quick-action-btn" onclick="chatWithAI()"><i class="fas fa-robot"></i> Chat with AI</button>
+                </div>
+            </div>
+            <div class="card ai-chat-card" id="aiChatCard" style="display:none">
+                <div class="card-header"><div class="card-icon"><i class="fas fa-robot"></i></div><h2>AI Companion</h2>
+                <div style="display:flex;gap:8px;align-items:center">
+                    <button id="audioToggleBtn" onclick="toggleChatAudio()" title="Audio ON" style="background:none;border:none;font-size:18px;cursor:pointer;color:#4ECDC4;padding:4px"><i class="fas fa-volume-up"></i></button>
+                    <button class="close-chat" onclick="closeChat()"><i class="fas fa-times"></i></button>
+                </div></div>
+                <div class="card-body chat-body" id="chatBody"></div>
+                <div class="chat-input">
+                    <input type="text" id="chatInput" placeholder="Ask me anything..." onkeypress="handleChatKeypress(event)">
+                    <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HEALTH TAB -->
+    <div id="tab-health" class="tab-content">
+        <div class="tab-inner">
+            <p class="tab-title">🏥 My Health</p>
+            <div class="card" style="margin-bottom:16px"><div class="card-header"><h2>My Conditions</h2></div><div class="card-body" id="healthConditions"></div></div>
+            <div class="card" style="margin-bottom:16px"><div class="card-header"><h2>🚫 Foods to Avoid</h2></div><div class="card-body" id="foodsToAvoid"></div></div>
+            <div class="card" style="margin-bottom:16px"><div class="card-header"><h2>✅ Recommended Foods</h2></div><div class="card-body" id="foodsRecommended"></div></div>
+            <div class="card"><div class="card-header"><h2>💊 My Medications</h2></div><div class="card-body" id="healthMedications"></div></div>
+        </div>
+    </div>
+
+    <!-- SCHEDULE TAB -->
+    <div id="tab-schedule" class="tab-content">
+        <div class="tab-inner">
+            <p class="tab-title">📅 Today's Schedule</p>
+            <div class="card"><div class="card-body" id="scheduleList"></div></div>
+        </div>
+    </div>
+
+    <!-- PROFILE TAB -->
+    <div id="tab-profile" class="tab-content">
+        <div class="tab-inner">
+            <p class="tab-title">👤 My Profile</p>
+            <div class="card" style="margin-bottom:16px"><div class="card-body" id="profileInfo"></div></div>
+            <div class="card" style="margin-bottom:16px">
+            </div>
+            <div class="card" style="margin-bottom:16px">
+                <div class="card-header"><h2>👨‍👩‍👧 Family WhatsApp Numbers</h2></div>
+                <div class="card-body">
+                    <p style="font-size:13px;color:#9ca3af;margin-bottom:8px">Edit phone numbers to WhatsApp directly to each person</p>
+                    <div id="familyEditList"></div>
+                </div>
+            </div>
+            <div class="card" style="margin-bottom:16px">
+                <div class="card-header"><h2>🗣️ Change Language</h2></div>
+                <div class="card-body">
+                    <select id="languageChange" onchange="changeLanguage(this.value)" style="width:100%;padding:14px;font-size:15px;border:2px solid #f0e8e0;border-radius:12px;font-family:inherit;">
+                        <optgroup label="🇸🇬 Singapore & Malaysia">
+                            <option value="singlish">Singlish</option><option value="mandarin">Mandarin</option><option value="cantonese">Cantonese</option><option value="hokkien">Hokkien</option><option value="teochew">Teochew</option><option value="hakka">Hakka</option><option value="malay">Malay</option><option value="tamil">Tamil</option><option value="english">English</option>
+                        </optgroup>
+                        <optgroup label="🌏 Southeast Asia">
+                            <option value="vietnamese">Vietnamese</option><option value="thai">Thai</option><option value="tagalog">Tagalog</option><option value="indonesian">Bahasa Indonesia</option><option value="burmese">Burmese</option><option value="khmer">Khmer</option><option value="lao">Lao</option>
+                        </optgroup>
+                        <optgroup label="🌍 South Asia">
+                            <option value="hindi">Hindi</option><option value="bengali">Bengali</option><option value="punjabi">Punjabi</option><option value="gujarati">Gujarati</option><option value="urdu">Urdu</option>
+                        </optgroup>
+                    </select>
+                    <p id="languageChanged" style="color:#4ECDC4;font-weight:800;margin-top:10px;display:none">✅ Language updated! News refreshed.</p>
+                </div>
+            </div>
+            <button class="btn-secondary full-width" onclick="showScreen('loginScreen')">← Switch Profile</button>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <button class="nav-item active" onclick="switchTab('home')"><i class="fas fa-home"></i><span>Home</span></button>
+        <button class="nav-item" onclick="switchTab('health')"><i class="fas fa-heartbeat"></i><span>Health</span></button>
+        <button class="nav-item" onclick="switchTab('schedule')"><i class="fas fa-calendar-alt"></i><span>Schedule</span></button>
+        <button class="nav-item" onclick="switchTab('profile')"><i class="fas fa-user"></i><span>Profile</span></button>
+    </div>
+</div>
+
+<!-- NEWS READING OVERLAY -->
+<div id="newsReadingOverlay" class="overlay" style="pointer-events:none">
+    <div class="news-reading-container" style="position:relative">
+        <button class="close-overlay" onclick="stopNewsReading()"><i class="fas fa-times"></i></button>
+        <div class="news-reading-content">
+            <div class="reading-avatar">🤖</div>
+            <h2 id="readingTitle">Today's News</h2>
+            <p class="reading-dialect-note" id="readingDialectNote">Reading in English</p>
+            <div class="news-text-display" id="newsTextDisplay"></div>
+
+            <div class="reading-controls">
+                <button class="control-btn" onclick="prevNews()" title="Previous"><i class="fas fa-step-backward"></i></button>
+                <button class="control-btn play-pause-btn" id="playPauseBtn" onclick="toggleNewsReading()"><i class="fas fa-play"></i></button>
+                <button class="control-btn" onclick="nextNews()" title="Next"><i class="fas fa-step-forward"></i></button>
+            </div>
+            <div class="reading-progress">
+                <div class="progress-bar-large"><div class="progress-fill-large" id="readingProgress" style="width:0%"></div></div>
+                <span id="readingPage" style="font-size:13px;font-weight:700;white-space:nowrap">1 / 5</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- VIDEO MODAL -->
+<div id="videoSummaryModal" class="modal" onclick="event.stopPropagation()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <div class="modal-header">
+            <h2><i class="fas fa-video" style="color:#FF6B6B"></i> Daily Video Summary</h2>
+            <button class="close-modal" onclick="event.preventDefault();closeVideoModal()" type="button"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <!-- Video player area -->
+            <div class="video-preview-area" id="videoPreviewArea">
+                <div id="videoPlaceholderInner" class="video-placeholder-inner">
+                    <i class="fas fa-film"></i>
+                    <p>Agnes AI will generate a personalised video</p>
+                </div>
+                <video id="generatedVideo" controls playsinline style="display:none;width:100%;border-radius:12px;" preload="auto"></video>
+            </div>
+
+            <div class="summary-details" style="margin-bottom:16px">
+                <h3 style="font-size:15px;font-weight:800;margin-bottom:12px">Today's summary includes:</h3>
+                <ul class="summary-items">
+                    <li><i class="fas fa-check"></i> Medication adherence report</li>
+                    <li><i class="fas fa-check"></i> Water intake for the day</li>
+                    <li><i class="fas fa-check"></i> Activity and wellness metrics</li>
+                    <li><i class="fas fa-check"></i> Personalised message to family</li>
+                </ul>
+                <div class="family-recipients" id="familyRecipients"></div>
+            </div>
+
+            <button class="btn-primary full-width" onclick="event.preventDefault();generateAndSendSummary()" type="button">
+                <i class="fas fa-magic"></i> Generate & Send with Agnes AI
+            </button>
+            <div id="generationStatus" class="summary-status"></div>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
